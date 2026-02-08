@@ -30,7 +30,7 @@ export const CustomButton = ({
             className={[
                 variantClasses[variant],
                 sizeClasses[size],
-                "rounded-lg active:bg-opacity-70",
+                "rounded-lg active:bg-opacity-70 self-start",
             ].join(' ')}
             onPress={onPress}
         >
