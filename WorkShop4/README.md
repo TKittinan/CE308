@@ -1,50 +1,31 @@
-# Welcome to your Expo app 👋
+Ex3.1 – ItemCard
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+แสดงรายการสินค้าเป็นการ์ด
 
-## Get started
+รับข้อมูลสินค้าผ่าน props (items)
 
-1. Install dependencies
+แต่ละสินค้ามีปุ่มที่กำหนด size และ color ต่างกัน
 
-   ```bash
-   npm install
-   ```
+ใช้ CustomButton เพื่อควบคุมรูปแบบปุ่ม
 
-2. Start the app
+Ex3.2 – CustomInput & Form
 
-   ```bash
-   npx expo start
-   ```
+สร้างฟอร์มกรอกข้อมูลสินค้า (ชื่อสินค้า, ราคา, จำนวน)
 
-In the output, you'll find options to open the app in a
+ใช้ CustomInput เป็น component กลางสำหรับ TextInput
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+จัดการค่าด้วย useState
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+ปุ่ม Submit แยกออกจากช่องกรอกข้อมูลอย่างชัดเจน
 
-## Get a fresh project
+เมื่อกด Submit จะแสดงข้อมูลที่กรอกผ่าน alert
 
-When you're ready, run:
+โครงสร้างหลัก
 
-```bash
-npm run reset-project
-```
+CustomInput : ช่องกรอกข้อมูลพร้อม label
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+CustomButton : ปุ่มที่ปรับขนาดและสีได้
 
-## Learn more
+ItemCard : ใช้แสดงรายการสินค้า (Ex3.1)
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+index.tsx : ควบคุมการทำงานของแต่ละแบบฝึกหัด
