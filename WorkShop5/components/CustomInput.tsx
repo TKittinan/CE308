@@ -3,6 +3,7 @@ import {View, Text, TextInput, TextInputProps} from "react-native";
 
 interface CustomInputProps extends TextInputProps {
     label: string;
+    
     error?:string;
     touched?: boolean;
 }
@@ -28,6 +29,7 @@ export default function CustomInput({
                     text-base text-gray-800
                     `}
                     placeholderTextColor="#9CA3AF"
+                    {...props}
             />
 
             {hasError &&(

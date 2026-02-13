@@ -19,6 +19,7 @@ interface FormData {
   phone: string;
   password: string;
   confirmPassword: string;
+  address: string;
 }
 
 interface FormErrors {
@@ -27,6 +28,7 @@ interface FormErrors {
   phone?:string;
   password?:string;
   confirmPassword?:string;
+  address?:string;
 }
 
 export default function Index(){
@@ -36,6 +38,7 @@ export default function Index(){
     phone:"",
     password:"",
     confirmPassword:"",
+    address:"",
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -91,6 +94,15 @@ export default function Index(){
         }
       return undefined;
 
+      case "address":
+        if (!value.trim()) {
+          return "โปรดกรอกที่อยู่ของท่าน";
+        }
+        if (value.trim().length < 10) {
+          return "โปรดกรอกที่อยู่ให้ถูกต้อง";
+        }
+      return undefined;
+
       default:
         return undefined;
     }
@@ -124,10 +136,11 @@ export default function Index(){
   };
 
   const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
+    const newErrors: FormErrors = {
+    };
     let isValid = true;
 
-    (Object.keys(formData) as Array<keyof FormData>).forEach((key) => {
+    (Object.keys(formData) as (keyof FormData)[]).forEach((key) => {
       const error = validateField(key, formData[key]);
       if (error) {
         newErrors[key] = error;
@@ -160,7 +173,7 @@ export default function Index(){
       setIsLoading(false);
       Alert.alert(
         "สำเร็จ!",
-        `ลงทะเบียนสำเร็จ\nชื่อ: ${formData.fullName}\nอีเมล: ${formData.email}\nเบอร์: ${formData.phone}`,
+        `ลงทะเบียนสำเร็จ\nชื่อ: ${formData.fullName}\nอีเมล: ${formData.email}\nเบอร์: ${formData.phone}\nที่อยู่: ${formData.address}`,
         [
           {
             text: "ตรวจสอบ",
@@ -183,6 +196,7 @@ export default function Index(){
       phone:"",
       password:"",
       confirmPassword:"",
+      address:"",
     });
     setErrors({});
     setTouched({});
@@ -268,6 +282,22 @@ export default function Index(){
               secureTextEntry
               autoCapitalize="none"
             />
+            <CustomInput
+              label="ที่อยู่"
+              placeholder="โปรดกรอกที่อยู่อีกครั้ง"
+              value={formData.address}
+              onChangeText={(value) => handleChange("address", value)}
+              onBlur={() => handleBlur("address")}
+              error={errors.address}
+              touched={touched.address}
+              autoCapitalize="words"
+            />
+            <View className="items-end mt-1">
+              <Text>
+                {formData.address.length} / 200
+              </Text>
+            </View>
+
             <View className="mt4 space-y-3">
               <CustomButton
                 title="ลงทะเบียน"
@@ -292,7 +322,8 @@ export default function Index(){
                 - กรอกข้อมูลให้ครบถ้วย{"\n"}
                 - อีเมลต้องมีรูปแบบที่ถูกต้อง{"\n"}
                 - เบอร์มือถือต้องเป็นตัวเลข 10หลัก{"\n"}
-                - รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร
+                - รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร{"\n"}
+                - กรอกที่อยู่ให้ถูกต้อง
               </Text>
             </View>
           </View>

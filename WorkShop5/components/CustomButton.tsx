@@ -26,7 +26,7 @@ export default function CustomButton({
                 return "bg-blue-600 active:bg-blue-700";
             case "secondary":
                 return "bg-gray-600 active:bg-gray-700";
-            case "primary":
+            case "danger":
                 return "bg-red-600 active:bg-red-700";
             default:
                 return "bg-blue-600 active:bg-blue-700";
