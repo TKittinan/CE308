@@ -12,8 +12,8 @@ import {
 } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
-import Checkbox from "@/components/Checkbox";
-// import Gender from "@/components/Gender";
+import Checkbox from "../components/Checkbox";
+import DatePicker from "../components/DatePicker";
 
 interface FormData {
   fullName: string;
@@ -24,6 +24,7 @@ interface FormData {
   address: string;
   gender: string;
   checkbox: boolean;
+  birthDate: Date | null;
 }
 
 interface FormErrors {
@@ -35,6 +36,7 @@ interface FormErrors {
   address?:string;
   gender?: string;
   checkbox?: string;
+  birthDate?: string;
 }
 
 export default function Index(){
@@ -47,13 +49,15 @@ export default function Index(){
     address:"",
     gender:"",
     checkbox: false,
+    birthDate: null,
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<{[key: string]: boolean }>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const validateField = (name: string, value: string | boolean): string | undefined => {
+  const validateField = (name: keyof FormData, value: FormData[keyof FormData]): string | undefined => {
     switch (name) {
       case "fullName":
         if (!String(value).trim()) {  
@@ -117,6 +121,31 @@ export default function Index(){
         }
       return undefined;
 
+      case "birthDate":
+        if (!value) {
+          return "กรุณาเลือกวันเกิด";
+        }
+        if (value instanceof Date) {
+          const today = new Date();
+
+          let age = today.getFullYear() - value.getFullYear();
+
+          const monthDiff = today.getMonth() - value.getMonth();
+          const dayDiff = today.getDate() - value.getDate();
+
+          if (
+            monthDiff < 0 ||
+            (monthDiff === 0 && dayDiff < 0)
+          ) {
+            age--;
+          }
+
+          if (age < 13) {
+            return "คุณต้องมีอายุอย่างน้อย 13 ปี";
+          }
+        }
+      return undefined;
+
       case "checkbox":
         if (!value) {
           return "คุณต้องยอมรับเงื่อนไข";
@@ -128,7 +157,7 @@ export default function Index(){
     }
   };
 
-  const handleChange = (name: keyof FormData, value: string | boolean) => {
+  const handleChange = (name: keyof FormData, value: string | boolean | Date | null) => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -219,6 +248,7 @@ export default function Index(){
       address:"",
       gender:"",
       checkbox: false,
+      birthDate: null,
     });
     setErrors({});
     setTouched({});
@@ -362,6 +392,18 @@ export default function Index(){
               )}
             </View>
 
+            <DatePicker
+              label="วันเกิด"
+              value={formData.birthDate}
+              onChange={(date) => handleChange("birthDate", date)}
+              onBlur={() => handleBlur("birthDate")}
+              error={errors.birthDate}
+              touched={touched.birthDate}
+              show={showDatePicker}
+              onShow={() => setShowDatePicker(true)}
+              onClose={() => setShowDatePicker(false)}
+            />
+
             <Checkbox
               label="ลงทะเบียนยอมรับเงื่อนไข"
               checked={formData.checkbox}
@@ -399,7 +441,9 @@ export default function Index(){
                 - เบอร์มือถือต้องเป็นตัวเลข 10หลัก{"\n"}
                 - รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร{"\n"}
                 - กรอกที่อยู่ให้ถูกต้อง{"\n"}
-                - ต้องยอมรับเงื่อนไขเพื่อดำเนินการต่อ
+                - ต้องยอมรับเงื่อนไขเพื่อดำเนินการต่อ{"\n"}
+                - วันเกิดต้องเลือกเพื่อยืนยันอายุของคุณ{"\n"}
+                - คุณต้องมีอายุอย่างน้อย 13 ปีเพื่อสมัครสมาชิก
               </Text>
             </View>
           </View>
