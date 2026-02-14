@@ -1,50 +1,45 @@
-# Welcome to your Expo app 👋
+ระบบนี้เป็นฟอร์มลงทะเบียนสมาชิกที่พัฒนาด้วย React Native และ TypeScript โดยมีการตรวจสอบความถูกต้องของข้อมูลก่อนส่งแบบฟอร์ม
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+การทำงานหลัก
 
-## Get started
+ใช้ formData เก็บข้อมูลทั้งหมดของผู้ใช้
 
-1. Install dependencies
+ใช้ errors เก็บข้อความแจ้งเตือนเมื่อข้อมูลไม่ถูกต้อง
 
-   ```bash
-   npm install
-   ```
+ใช้ touched ตรวจสอบว่าผู้ใช้เคยแตะช่องนั้นแล้วหรือยัง เพื่อควบคุมการแสดง error
 
-2. Start the app
+การตรวจสอบข้อมูล (Validation)
 
-   ```bash
-   npx expo start
-   ```
+ตรวจสอบแต่ละช่องผ่านฟังก์ชัน validateField()
 
-In the output, you'll find options to open the app in a
+เมื่อละออกจากช่อง (onBlur) จะตรวจสอบทันที
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+เมื่อกด Submit จะตรวจสอบทุกช่องด้วย validateForm()
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+หากข้อมูลไม่ครบหรือผิดเงื่อนไข จะแสดงข้อความแจ้งเตือน
 
-## Get a fresh project
+เงื่อนไขสำคัญ
 
-When you're ready, run:
+อีเมลต้องอยู่ในรูปแบบที่ถูกต้อง
 
-```bash
-npm run reset-project
-```
+เบอร์โทรต้องเป็นตัวเลข 10 หลัก
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+รหัสผ่านอย่างน้อย 6 ตัวอักษร
 
-## Learn more
+ต้องเลือกเพศ
 
-To learn more about developing your project with Expo, look at the following resources:
+ต้องมีอายุอย่างน้อย 13 ปี (ตรวจสอบปี เดือน วัน)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+ต้องกดยอมรับเงื่อนไข
 
-## Join the community
+การใช้งาน
 
-Join our community of developers creating universal apps.
+กรอกข้อมูลให้ครบทุกช่อง
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+เลือกเพศ และวันเกิด
+
+กดยอมรับเงื่อนไข
+
+กดปุ่ม “ลงทะเบียน”
+
+หากข้อมูลถูกต้อง ระบบจะแสดงข้อความสำเร็จ
