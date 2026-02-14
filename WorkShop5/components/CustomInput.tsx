@@ -3,7 +3,6 @@ import {View, Text, TextInput, TextInputProps} from "react-native";
 
 interface CustomInputProps extends TextInputProps {
     label: string;
-    
     error?:string;
     touched?: boolean;
 }

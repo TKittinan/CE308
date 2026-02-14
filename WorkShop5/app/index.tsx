@@ -12,6 +12,8 @@ import {
 } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
+import Checkbox from "@/components/Checkbox";
+// import Gender from "@/components/Gender";
 
 interface FormData {
   fullName: string;
@@ -20,6 +22,8 @@ interface FormData {
   password: string;
   confirmPassword: string;
   address: string;
+  gender: string;
+  checkbox: boolean;
 }
 
 interface FormErrors {
@@ -29,6 +33,8 @@ interface FormErrors {
   password?:string;
   confirmPassword?:string;
   address?:string;
+  gender?: string;
+  checkbox?: string;
 }
 
 export default function Index(){
@@ -39,67 +45,81 @@ export default function Index(){
     password:"",
     confirmPassword:"",
     address:"",
+    gender:"",
+    checkbox: false,
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<{[key: string]: boolean }>({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const validateField = (name: string, value: string): string | undefined => {
+  const validateField = (name: string, value: string | boolean): string | undefined => {
     switch (name) {
       case "fullName":
-        if (!value.trim()) {
+        if (!String(value).trim()) {  
           return "กรอกชื่อ-นามสกุล";
         }
-        if (value.trim().length < 3) {
+        if (String(value).trim().length < 3) {
           return "ชื่อ-นามสกุลต้องมีอย่างน้อย 3หลัก";
         }
         return undefined;
 
       case "email":
-        if (!value.trim()) {
+        if (!String(value).trim()) {
           return "กรอกอีเมล";
         }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(value)){
+        if (!emailRegex.test(String(value))){
           return "รูปแบบอีเมลไม่ถูกต้อง";
         }
       return undefined;
       
       case "phone":
-        if (!value.trim()) {
+        if (!String(value).trim()) {
           return "กรอกเบอร์";
         }
         const phoneRegex = /^[0-9]{10}$/;
-        if (!phoneRegex.test(value)) {
+        if (!phoneRegex.test(String(value))) {
           return "เบอร์มือถือต้องเป็นเลข10หลักเท่านั้น";
         }
       return undefined;
 
       case "password":
-        if (!value.trim()) {
+        if (!String(value).trim()) {
           return "กรอกรหัสผ่าน";
         }
-        if (value.trim().length < 6) {
+        if (String(value).trim().length < 6) {
           return "รหัสผ่านต้องมีอย่างน้อย 6หลัก";
         }
       return undefined;
 
       case "confirmPassword":
-        if (!value.trim()) {
+        if (!String(value).trim()) {
           return "ยืนยันรหัสผ่าน";
         }
-        if (value !== formData.password) {
+        if (String(value) !== formData.password) {
           return "รหัสผ่านไม่ตรงกัน";
         }
       return undefined;
 
       case "address":
-        if (!value.trim()) {
+        if (!String(value).trim()) {
           return "โปรดกรอกที่อยู่ของท่าน";
         }
-        if (value.trim().length < 10) {
+        if (String(value).trim().length < 10) {
           return "โปรดกรอกที่อยู่ให้ถูกต้อง";
+        }
+      return undefined;
+
+      case "gender":
+        if (!String(value).trim()) {
+          return "กรุณาเลือกเพศ";
+        }
+      return undefined;
+
+      case "checkbox":
+        if (!value) {
+          return "คุณต้องยอมรับเงื่อนไข";
         }
       return undefined;
 
@@ -108,7 +128,7 @@ export default function Index(){
     }
   };
 
-  const handleChange = (name: keyof FormData, value: string) => {
+  const handleChange = (name: keyof FormData, value: string | boolean) => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -197,6 +217,8 @@ export default function Index(){
       password:"",
       confirmPassword:"",
       address:"",
+      gender:"",
+      checkbox: false,
     });
     setErrors({});
     setTouched({});
@@ -282,6 +304,7 @@ export default function Index(){
               secureTextEntry
               autoCapitalize="none"
             />
+            
             <CustomInput
               label="ที่อยู่"
               placeholder="โปรดกรอกที่อยู่อีกครั้ง"
@@ -292,11 +315,63 @@ export default function Index(){
               touched={touched.address}
               autoCapitalize="words"
             />
+
             <View className="items-end mt-1">
               <Text>
                 {formData.address.length} / 200
               </Text>
             </View>
+
+            <Text className="text-gray-700 font-semibold mb-2 text-base">
+              เลือกเพศ
+            </Text>
+            <View className={`rounded-lg p-3 border-2 mb-2
+              ${touched.gender && errors.gender
+                ? "border-red-500 bg-red-50"
+                : "border-gray-300 bg-white"
+              }
+            `}>
+              <Checkbox
+                label="เพศชาย"
+                checked={formData.gender === "male"}
+                onPress={() => {
+                  handleChange("gender",formData.gender === "male" ? "" : "male");
+                  setTouched((prev) => ({ ...prev, gender: true }));
+                }}
+              />
+              <Checkbox
+                label="เพศหญิง"
+                checked={formData.gender === "female"}
+                onPress={() => {
+                  handleChange("gender",formData.gender === "female" ? "" : "female");
+                  setTouched((prev) => ({ ...prev, gender: true }));
+                }}
+              />
+              <Checkbox
+                label="ไม่ระบุเพศ"
+                checked={formData.gender === "other"}
+                onPress={() => {
+                  handleChange("gender",formData.gender === "other" ? "" : "other");
+                  setTouched((prev) => ({ ...prev, gender: true }));
+                }}
+              />
+              {touched.gender && errors.gender && (
+                <Text className="text-red-500 text-sm mt-1">
+                  {errors.gender}
+                </Text>
+              )}
+            </View>
+
+            <Checkbox
+              label="ลงทะเบียนยอมรับเงื่อนไข"
+              checked={formData.checkbox}
+              error={errors.checkbox}
+              touched={touched.checkbox}
+              onPress={() => {
+                handleChange("checkbox", !formData.checkbox);
+                setTouched((prev) => ({ ...prev, checkbox: true }));
+              }}
+            />
 
             <View className="mt4 space-y-3">
               <CustomButton
@@ -323,7 +398,8 @@ export default function Index(){
                 - อีเมลต้องมีรูปแบบที่ถูกต้อง{"\n"}
                 - เบอร์มือถือต้องเป็นตัวเลข 10หลัก{"\n"}
                 - รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร{"\n"}
-                - กรอกที่อยู่ให้ถูกต้อง
+                - กรอกที่อยู่ให้ถูกต้อง{"\n"}
+                - ต้องยอมรับเงื่อนไขเพื่อดำเนินการต่อ
               </Text>
             </View>
           </View>
